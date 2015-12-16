@@ -1,0 +1,33 @@
+From 9fb0e8452ab23ef38b5597a1f4374255cfa03e60 Mon Sep 17 00:00:00 2001
+From: Josef Stribny <jstribny@redhat.com>
+Date: Mon, 3 Feb 2014 16:31:03 +0100
+Subject: [PATCH] Rescue v8/init require
+
+---
+ lib/v8.rb | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/lib/v8.rb b/lib/v8.rb
+index 892550a..b1206f6 100644
+--- a/lib/v8.rb
++++ b/lib/v8.rb
+@@ -1,7 +1,15 @@
+ require "v8/version"
+ 
+ require 'v8/weak'
+-require 'v8/init'
++begin
++  require 'v8/init'
++rescue LoadError => e
++  puts <<-EOF
++WARNING: v8314 is not enabled. You need to enable v8314 scl to be able to run v8 runtime.
++e.g. You can run rails like `scl enable ror40 v8314 'rails s'`
++EOF
++  raise e
++end
+ require 'v8/error'
+ require 'v8/stack'
+ require 'v8/conversion/fundamental'
+-- 
+1.8.3.1
+
